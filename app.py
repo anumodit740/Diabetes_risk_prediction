@@ -51,17 +51,33 @@ st.divider()
 # ----------------------------
 if st.button("Predict Diabetes Risk"):
     
-    input_data = np.array([[pregnancies, glucose, blood_pressure,
-                            skin_thickness, insulin, bmi, dpf, age]])
-    
-    prediction = model.predict(input_data)[0]
-    probability = model.predict_proba(input_data)[0][1]
-    
-    st.subheader("Prediction Result")
-    
-    if prediction == 1:
-        st.error(f"High Risk of Diabetes ({probability*100:.2f}% probability)")
-    else:
-        st.success(f"Low Risk of Diabetes ({probability*100:.2f}% probability)")
-    
-    st.progress(int(probability * 100))
+    try:
+        input_data = np.array([[pregnancies, glucose, blood_pressure,
+                                skin_thickness, insulin, bmi, dpf, age]])
+        
+        prediction = model.predict(input_data)[0]
+        
+        # Safe probability handling
+        if hasattr(model, "predict_proba"):
+            probability = model.predict_proba(input_data)[0][1]
+        else:
+            probability = None
+        
+        st.subheader("Prediction Result")
+        
+        if prediction == 1:
+            if probability:
+                st.error(f"High Risk of Diabetes ({probability*100:.2f}% probability)")
+            else:
+                st.error("High Risk of Diabetes")
+        else:
+            if probability:
+                st.success(f"Low Risk of Diabetes ({probability*100:.2f}% probability)")
+            else:
+                st.success("Low Risk of Diabetes")
+
+        if probability:
+            st.progress(int(probability * 100))
+
+    except Exception as e:
+        st.error(f"Error occurred: {e}")
