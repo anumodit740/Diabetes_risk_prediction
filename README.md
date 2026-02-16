@@ -123,8 +123,3 @@ This project demonstrates the application of machine learning in healthcare with
 - `README.md` – Project documentation
 
 ---
-
-## 📹 Project Demo
-A **4–5 minute narrated video demo** explaining the dataset, feature engineering, model training, evaluation, and health insights is included as part of the project submission.
-
-The complete implementation is available in this GitHub repository, and the video focuses on explaining the **approach and results**.
